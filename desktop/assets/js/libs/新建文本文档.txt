@@ -1,0 +1,2 @@
+jsmodel : https://github.com/benpickles/js-model or http://benpickles.github.io/js-model/
+sammy : https://github.com/quirkey/sammy or http://sammyjs.org/download

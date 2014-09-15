@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge" />
+<meta name="description" content="JavaScript desktop environment built with jQuery." />
+<title>jQuery Desktop</title>
+<!--[if lt IE 7]>
+<script>
+window.top.location = 'ie.html';
+</script>
+<![endif]-->
+<link rel="stylesheet" href="assets/css/reset.css" />
+<link rel="stylesheet" href="assets/css/desktop.css" />
+<!--[if lt IE 9]>
+<link rel="stylesheet" href="assets/css/ie.css" />
+<![endif]-->
+</head>
+<body>
+<script id="icon-tpl" type="text/x-handlebars-template">
+	<a class="abs icon" id="icon_{{name}}">
+      <img src="{{src}}" />
+      {{title}}
+    </a>
+</script>
+
+<script id="win-tpl" type="text/x-handlebars-template">
+	<div id="{{name}}" class="abs window">
+      <div class="abs window_inner">
+        <div class="window_top">
+          <span class="float_left">
+            <img src="{{src}}" />
+            {{title}}
+          </span>
+          <span class="float_right">
+            <a href="#" class="window_min"></a>
+            <a href="#" class="window_resize"></a>
+            <a href="#" class="window_close"></a>
+          </span>
+        </div>
+        <div class="abs window_content">
+		<!--
+          <div class="window_aside">
+            
+          </div>
+		-->
+          <div class="window_main">
+            
+          </div>
+        </div>
+        <div class="abs window_bottom">
+          
+        </div>
+      </div>
+      <span class="abs ui-resizable-handle ui-resizable-se"></span>
+    </div>
+</script>
+
+<script id="task-tpl" type="text/x-handlebars-template">
+      <li>
+        <a href="#" id ="dock_{{name}}">
+          <img src="{{src}}" />
+          {{title}}
+        </a>
+      </li>
+</script>
+
+<div class="abs" id="wrapper">
+  <div class="abs" id="desktop">  </div>
+  <div class="abs" id="bar_top">  </div>
+  <div class="abs" id="bar_bottom">
+    <a class="float_left" id="show_desktop" title="显示桌面">
+      <img src="assets/images/icons/icon_22_desktop.png" />
+    </a>
+    <ul id="dock">
+      
+    </ul>
+  </div>
+</div>
+<!--
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+-->
+<script>
+  !window.jQuery && document.write(unescape('%3Cscript src="assets/js/jquery.js"%3E%3C/script%3E'));
+  !window.jQuery && document.write(unescape('%3Cscript src="assets/js/jquery.ui.js"%3E%3C/script%3E'));
+</script>
+<script src="assets/js/libs/handlebars/2.0.0/handlebars.js"></script>
+<script src="assets/js/libs/jsmodel/0.11.0/jsmodel.js"></script>
+<script src="assets/js/jquery.desktop.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+
+</script>
+</body>
+</html>
