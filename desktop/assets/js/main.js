@@ -57,6 +57,8 @@ $(function(){
 		getIcon(icons);
 		getWin(wins);
 		getTasks(tasks);
+		
+		AddComputer();
 	}
 	
 	function getIcon(icons){
@@ -94,12 +96,61 @@ $(function(){
 			$task = $(getTpl('#task-tpl',tasks[i])).appendTo('#dock');
 		}
 	}
+	
 	function getTpl(tplName,data)
 	{
 		var source = $(tplName).html();
 		var template = Handlebars.compile(source);
 		
 		return template(data);
+	}
+	
+	function AddComputer()
+	{
+		var cols = [
+			{name : 'name',title : '名称'}
+			,{name: 'model',title : '型号'}
+			,{name : 'cpu', title : 'CPU'}
+			,{name : 'memory', title : '内存'}
+			];
+			
+		var data = [{
+			  name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
+			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
+			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
+			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
+			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
+			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
+			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
+			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
+			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
+			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'
+		}];
+		
+		 
+		//$('#computer > div.window_main').append(getGrid('computer',data,cols));
+		var html = getGrid('computer',data,cols);
+		$('div#computer .window_main').append($(html));
+		
+		console.log(html);
+	}
+	
+	function getGrid(id, data , cols) {
+		var source = $('#grid-tpl').html();
+		var template = Handlebars.compile(source);
+		var colList = [];
+		var colKey = [];
+		$.each(cols , function(i,col){
+			colList.push(col.title);
+			colKey.push(col.name);
+		});
+		
+		return template({
+			name : id
+			,data : data
+			,col : colList
+			,colKey : colKey
+		});
 	}
 	
 	init();

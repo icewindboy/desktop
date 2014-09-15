@@ -15,8 +15,6 @@ window.top.location = 'ie.html';
 <!--[if lt IE 9]>
 <link rel="stylesheet" href="assets/css/ie.css" />
 <![endif]-->
-</head>
-<body>
 <script id="icon-tpl" type="text/x-handlebars-template">
 	<a class="abs icon" id="icon_{{name}}">
       <img src="{{src}}" />
@@ -33,9 +31,9 @@ window.top.location = 'ie.html';
             {{title}}
           </span>
           <span class="float_right">
-            <a href="#" class="window_min"></a>
-            <a href="#" class="window_resize"></a>
-            <a href="#" class="window_close"></a>
+            <a  class="window_min"></a>
+            <a  class="window_resize"></a>
+            <a  class="window_close"></a>
           </span>
         </div>
         <div class="abs window_content">
@@ -57,13 +55,42 @@ window.top.location = 'ie.html';
 </script>
 
 <script id="task-tpl" type="text/x-handlebars-template">
-      <li>
-        <a href="#" id ="dock_{{name}}">
-          <img src="{{src}}" />
-          {{title}}
-        </a>
-      </li>
+	  <li>
+		<a href="#" id ="dock_{{name}}">
+		  <img src="{{src}}" />
+		  {{title}}
+		</a>
+	  </li>
 </script>
+
+<script id="grid-tpl" type="text/x-handlebars-template">
+	<table id="tbl_{{name}}" class="data">
+		<thead>
+			<tr>
+				<td><b>id</b></td>
+				{{#each col}}
+					<td><b>{{this}}</b></td>
+				{{/each}}
+			</tr>
+		</thead>
+
+		{{#each data}}
+		<tr>
+			<td>
+				{{@index}}
+			</td>
+
+			{{#each ../colKey}}
+				<td>{{lookup ../this this}}</td>
+			{{/each}}
+
+		</tr>
+		{{/each}}
+	</table>
+</script>
+
+</head>
+<body>
 
 <div class="abs" id="wrapper">
   <div class="abs" id="desktop">  </div>
