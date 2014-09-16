@@ -114,6 +114,18 @@ $(function(){
 			,{name : 'memory', title : '内存'}
 			];
 			
+		var Computer = Model('computer');
+		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+				
 		var data = [{
 			  name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
 			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
@@ -126,10 +138,9 @@ $(function(){
 			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
 			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'
 		}];
-		
 		 
 		//$('#computer > div.window_main').append(getGrid('computer',data,cols));
-		var html = getGrid('computer',data,cols);
+		var html = getGrid('computer',Computer.collection,cols);
 		$('div#computer .window_main').append($(html));
 		
 		console.log(html);

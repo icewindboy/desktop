@@ -37,11 +37,11 @@ window.top.location = 'ie.html';
           </span>
         </div>
         <div class="abs window_content">
-		<!--
+		
           <div class="window_aside">
             
           </div>
-		-->
+		
           <div class="window_main">
             
           </div>
@@ -67,9 +67,9 @@ window.top.location = 'ie.html';
 	<table id="tbl_{{name}}" class="data">
 		<thead>
 			<tr>
-				<td><b>id</b></td>
+				<th><b>id</b></th>
 				{{#each col}}
-					<td><b>{{this}}</b></td>
+					<th><b>{{this}}</b></th>
 				{{/each}}
 			</tr>
 		</thead>
@@ -81,7 +81,7 @@ window.top.location = 'ie.html';
 			</td>
 
 			{{#each ../colKey}}
-				<td>{{lookup ../this this}}</td>
+				<td>{{lookup ../this.attributes this}}</td>
 			{{/each}}
 
 		</tr>
