@@ -297,24 +297,46 @@ div.ui-resizable-handle {
   bottom: -1px;
 }
 
+.cell_editing {
+	border : 1px;
+	background-color : rgb(255,253,210);
+}
+
+.no-select
+{
+   user-select: none;
+   -o-user-select:none;
+   -moz-user-select: none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+}
+*:focus
+{
+    outline: none;
+}
 /* `Table >> Data
 ----------------------------------------------------------------------------------------------------*/
 
 table.data {
+  border-collapse : collapse;
+  table-layout : fixed;
   width: 100%;
   white-space: nowrap;
+  position : relative;
 }
 
 table.data th,
 table.data td {
-  padding: 5px 10px;
+  /*padding: 5px 10px;*/
+  position : relative;
+  overflow : hidden;
   vertical-align: middle;
 }
 
 table.data th {
   background: #fff url(../images/gui/bar_top.png) repeat-x left bottom;
   border-left: 1px solid #fff;
-  border-bottom: 1px solid #fff;
+  border-bottom: 0px/*1px solid #fff*/;
   font-weight: bold;
   text-shadow: #fff 0 1px 1px;
   white-space: nowrap;
@@ -337,6 +359,14 @@ table.data tbody tr.active td {
   color: #fff;
 }
 
+.select{
+    
+}
+
+table.data td.select div{
+    opacity: 1;
+    filter: alpha(opacity=100%); /* ie 8 and earlier*/
+}
 th.shrink {
   width: 1%;
 }

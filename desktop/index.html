@@ -56,7 +56,7 @@ window.top.location = 'ie.html';
 
 <script id="task-tpl" type="text/x-handlebars-template">
 	  <li>
-		<a href="#" id ="dock_{{name}}">
+		<a id ="dock_{{name}}">
 		  <img src="{{src}}" />
 		  {{title}}
 		</a>
@@ -64,7 +64,8 @@ window.top.location = 'ie.html';
 </script>
 
 <script id="grid-tpl" type="text/x-handlebars-template">
-	<table id="tbl_{{name}}" class="data">
+  <div id="container_{{name}}" >
+	<table id="tbl_{{name}}" class="data no-select">
 		<thead>
 			<tr>
 				<th><b>id</b></th>
@@ -76,9 +77,7 @@ window.top.location = 'ie.html';
 
 		{{#each data}}
 		<tr>
-			<td>
-				{{@index}}
-			</td>
+			<td>{{@index}}</td>
 
 			{{#each ../colKey}}
 				<td>{{lookup ../this.attributes this}}</td>
@@ -87,6 +86,7 @@ window.top.location = 'ie.html';
 		</tr>
 		{{/each}}
 	</table>
+  </div>	
 </script>
 
 </head>
@@ -104,6 +104,12 @@ window.top.location = 'ie.html';
     </ul>
   </div>
 </div>
+
+<div id='edit' style="border:solid 1px #aaa;position : relative ;overflow : hidden;width : 96%" >
+  <div id='dsptext' tabIndex=-1></div>
+  <input type ='text' style="position : absolute;top : -50px ;border : 0;font-size : 90%;width : 100%;height:100%"></input>
+</div> 
+  
 <!--
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>

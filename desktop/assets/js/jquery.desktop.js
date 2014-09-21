@@ -290,10 +290,10 @@ var JQD = (function($, window, document, undefined) {
 
         d.on('mousedown', 'table.data tr', function() {
           // Clear active state.
-          JQD.util.clear_active();
+          //JQD.util.clear_active();
 
           // Highlight row, ala Mac OS X.
-          $(this).closest('tr').addClass('active');
+          //$(this).closest('tr').addClass('active');
         });
       },
       wallpaper: function() {
