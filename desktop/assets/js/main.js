@@ -47,7 +47,8 @@ $(function(){
 	var moz = $.browser.mozilla = /firefox/.test(navigator.userAgent.toLowerCase()); 
 	var webkit=$.browser.webkit = /webkit/.test(navigator.userAgent.toLowerCase()); 
 	$.browser.opera = /opera/.test(navigator.userAgent.toLowerCase()); 
-	var ie=$.browser.msie = /msie/.test(navigator.userAgent.toLowerCase()); 
+	var ie=$.browser.msie = /msie/.test(navigator.userAgent.toLowerCase())
+	 || !!navigator.userAgent.match(/Trident\/7\./);
 	
 	function init(){
 		var forms = cfg.forms;
@@ -85,15 +86,7 @@ $(function(){
 			//设置edit div的高度,内容
 			$editDiv.height($newCell.height() -2);
 			$editDiv.find('#dsptext').text(text);
-			//设置 edit高度，内容
-			//if ( ie )
-			$input.css({'top' : -50});
-			if(moz || webkit){
-				$input.css({'z-index': parseInt("900")-100});		
-			}
-			$input.removeAttr('focus').focus();
-			$input.val(text);
-			
+						
 			//替换单元格文本节点
 			if  ( $newTextNode.length )
 				$newTextNode.replaceWith($editDiv);
@@ -109,6 +102,11 @@ $(function(){
 			//保存newCell
 			$table.removeData('curCell');
 			$table.data('curCell',{curCell : $newCell,text : text});
+			
+			//设置 edit高度，内容
+			$input.css({'top' : -500});			
+			$input.val(text).select();
+			$input.removeAttr('focus').focus();			
 		}
 		
 		$table.on('click',function(e){
@@ -129,13 +127,10 @@ $(function(){
 		function showInput(){		
 			var focus = $input.attr('focus');
 			if (!focus){
-				$input.attr('focus',1);
-				
 				$input.css({top : 0});						
-				$editDiv.css({border : '1px solid black','z-index':900});
-				$input.css('z-index',900+100);
-				//$input.select().focus();
-				input.select().focus();
+					
+				$input.select().focus();
+				$input.attr('focus',1);
 			}
 		}
 				
@@ -145,11 +140,7 @@ $(function(){
 			return true;
 		});
 
-		$(document).on('keydown',keydown);
-		//$('#computer').on('keydown',keydown);
-		//$('#computer').on('keydown',keydown);
-		
-		function keydown(e){
+		$editDiv.on('keydown',function keydown(e){
 			if ($.inArray(e.keyCode,[9,37,38,39,40])>-1 || e.keyCode <20 && $.inArray(e.keyCode,[0,8])==-1)
 			{
 				handleKey(e);
@@ -158,7 +149,7 @@ $(function(){
 
 			//显示文本框接收键盘输入 important
 			showInput();
-		};
+		});
 		
 		function handleKey(e){
 			return true;
