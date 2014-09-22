@@ -103,7 +103,7 @@ $(function(){
 			$table.removeData('curCell');
 			$table.data('curCell',{curCell : $newCell,text : text});
 			
-			//设置 edit高度，内容
+			//设置 edit高度
 			$input.css({'top' : -500});			
 			$input.val(text).select();
 			$input.removeAttr('focus').focus();			
@@ -152,8 +152,73 @@ $(function(){
 		});
 		
 		function handleKey(e){
-			return true;
+			if ( editting && $.inArray(e.keyCode,[37,38,39,40])>-1)
+				return true;
+			
 		};
+		
+		function direction(e){
+			var d = (-1);
+			var shift = e.shiftKey , ctrl = e.ctrlKey ,alt = e.altKey,keyCode = e.keyCode;
+			var oldrow = currentCell[0], oldcol = currentCell[1];
+			var row = oldrow, col = oldcol;
+			var rows = data.length,cols = columns.length;
+			
+			//如果edit是编辑状态，不响应单元格左右移动事件
+			if ((keyCode === 39 || keyCode ===37) && editting)
+				return false;
+				
+			if (keyCode === 9) {
+				if (shift) d = 3;
+				else d = 1;
+			}
+			if (keyCode ===39 ) {
+				d =1; //right
+			}
+			if (keyCode ===37) {
+				d =3; //left
+			}
+			if (keyCode ===40 || keyCode ===13) {
+				d =2; //down
+			}
+			if (keyCode ===38) {
+				d =0; //top
+			}			
+			if (d == 0 ) {
+				if (  row > 0)
+					row--;
+			}
+			if (d == 1 ) {
+				if ( col == cols-1 && row < rows-1)
+				{
+					col =0;
+					row++;
+				}			
+				else if ( col < cols-1) 
+					col ++;
+			}
+			if (d == 2 ) {
+				if (  row < rows-1)
+					row++;
+			}	
+			if (d == 3 ) {
+				if ( col == 0 && row > 0){
+					col = cols - 1;
+					row--;
+				}
+				else if ( col > 0) 
+					col --;				
+			}
+			
+			if (d > -1)
+				e.preventDefault();
+			if ( oldrow !== row || oldcol !== col){
+				editting = false;
+				return $table.find('td[row=' + row + '][col=' + col +']');
+			}
+			else
+				return false;
+		}		
 	}
 	
 	function makeDesk(forms){
