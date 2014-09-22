@@ -66,11 +66,11 @@ $(function(){
 	function edit_table(name){
 		var $container = $('#container_' + name);
 		var $table = $('#tbl_' + name);
-		var $currCell =  $table.find('tbody').find('tr:first td:first');
+		var $curCell =  $table.find('tbody').find('tr:first td:first');
 		var editting = false;
 		var $editDiv = $('#edit');
 		var $input = $editDiv.find('input[type=text]');
-		$table.data('curCell',{curCell : $currCell,text : $currCell.text()});
+		$table.data('curCell',{curCell : $curCell,text : $curCell.text()});
 		$container.attr('tabIndex',-1);
 		//$table.attr('tabIndex',"-1");
 		//
@@ -82,29 +82,25 @@ $(function(){
 			//设置新单元格
 			var $newTextNode = $newCell.contents().first();
 			var text = $newTextNode.text();
-						
-			//设置edit div的高度,内容
-			$editDiv.height($newCell.height() -2);
-			$editDiv.find('#dsptext').text(text);
-						
 			//替换单元格文本节点
 			if  ( $newTextNode.length )
 				$newTextNode.replaceWith($editDiv);
 			else
 				$newCell.appCodeName($editDiv);
-			
 			$newCell.addClass('select');	
-				
-			//恢复老单元格
-			$oldCell.removeClass('select');
-			$oldCell.text(oldText);
-			
 			//保存newCell
 			$table.removeData('curCell');
 			$table.data('curCell',{curCell : $newCell,text : text});
 			
+			//恢复老单元格
+			$oldCell.removeClass('select');
+			$oldCell.text(oldText);
+			
+			//设置edit div的高度,内容
+			$editDiv.height($newCell.height() -2);
+			$editDiv.find('#dsptext').text(text);		
 			//设置 edit高度
-			$input.css({'top' : -500});			
+			$input.css({'top' : -100});			
 			$input.val(text).select();
 			$input.removeAttr('focus').focus();			
 		}
@@ -146,17 +142,45 @@ $(function(){
 				handleKey(e);
 				return true;
 			}
-
 			//显示文本框接收键盘输入 important
 			showInput();
 		});
 		
 		function handleKey(e){
+			var shift = e.shiftKey , ctrl = e.ctrlKey ,alt = e.altKey,keyCode = e.keyCode;
+			var c = $table.data('curCell').curCell;
+			var n =curCell;
+			
 			if ( editting && $.inArray(e.keyCode,[37,38,39,40])>-1)
 				return true;
 			
+			if ( keyCode ===38 ) //top
+			{
+				
+			}
+			
 		};
 		
+		function navigator(active , d , rows ,cols)
+		{
+			var x = active.index();
+			var y = active.closest('tr').index();
+			
+			if (d == 37) {  //left
+			   x--;
+			}
+			if (d == 38) {  //top
+				y--;
+			}
+			if (d == 39) {  //right
+				x++
+			}
+			if (d == 40) {  //top
+				y++
+			}
+			var next = $('tr').eq(y).find('td').eq(x);
+			
+		}
 		function direction(e){
 			var d = (-1);
 			var shift = e.shiftKey , ctrl = e.ctrlKey ,alt = e.altKey,keyCode = e.keyCode;
@@ -247,7 +271,7 @@ $(function(){
 		getWin(wins);
 		getTasks(tasks);
 		
-		AddComputer();
+		addComputer();
 	}
 	
 	function getIcon(icons){
@@ -294,7 +318,7 @@ $(function(){
 		return template(data);
 	}
 	
-	function AddComputer()
+	function addComputer()
 	{
 		var cols = [
 			{name : 'name',title : '名称'}
@@ -314,27 +338,10 @@ $(function(){
 		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
 		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
 		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
-				
-		var data = [{
-			  name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
-			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
-			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
-			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
-			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
-			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
-			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
-			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
-			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}
-			,{name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'
-		}];
 		 
-		//$('#computer > div.window_main').append(getGrid('computer',data,cols));
 		var html = getGrid('computer',Computer.collection,cols);
 		$('div#computer .window_main').append($(html));
 		edit_table('computer');
-		//nav_table('#tbl_computer');
-		
-		console.log(html);
 	}
 	
 	function getGrid(id, data , cols) {
