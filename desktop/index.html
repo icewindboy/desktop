@@ -10,6 +10,9 @@
 window.top.location = 'ie.html';
 </script>
 <![endif]-->
+<!--
+<link rel="stylesheet" href = "assets/js/libs/bootstrap/3.1.0/css/bootstrap.css" />
+-->
 <link rel="stylesheet" href="assets/css/reset.css" />
 <link rel="stylesheet" href="assets/css/desktop.css" />
 <!--[if lt IE 9]>
@@ -36,18 +39,13 @@ window.top.location = 'ie.html';
             <a  class="window_close"></a>
           </span>
         </div>
-        <div class="abs window_content">
-		
-          <div class="window_aside">
-            
-          </div>
-		
-          <div class="window_main">
-            
+        <div class="abs window_content">	
+          <div class="window_aside">          
+          </div>		
+          <div class="window_main">           
           </div>
         </div>
-        <div class="abs window_bottom">
-          
+        <div class="abs window_bottom">          
         </div>
       </div>
       <span class="abs ui-resizable-handle ui-resizable-se"></span>
@@ -74,15 +72,12 @@ window.top.location = 'ie.html';
 				{{/each}}
 			</tr>
 		</thead>
-
 		{{#each data}}
 		<tr>
 			<td>{{@index}}</td>
-
 			{{#each ../colKey}}
 				<td>{{lookup ../this.attributes this}}</td>
 			{{/each}}
-
 		</tr>
 		{{/each}}
 	</table>
@@ -99,8 +94,7 @@ window.top.location = 'ie.html';
     <a class="float_left" id="show_desktop" title="显示桌面">
       <img src="assets/images/icons/icon_22_desktop.png" />
     </a>
-    <ul id="dock">
-      
+    <ul id="dock">      
     </ul>
   </div>
 </div>
@@ -120,6 +114,9 @@ window.top.location = 'ie.html';
   !window.jQuery && document.write(unescape('%3Cscript src="assets/js/jquery.js"%3E%3C/script%3E'));
   !window.jQuery && document.write(unescape('%3Cscript src="assets/js/jquery.ui.js"%3E%3C/script%3E'));
 </script>
+<!--
+<script src="assets/js/libs/bootstrap/3.1.0/js/bootstrap.js"></script>
+-->
 <script src="assets/js/libs/handlebars/2.0.0/handlebars.js"></script>
 <script src="assets/js/libs/jsmodel/0.11.0/jsmodel.js"></script>
 <script src="assets/js/jquery.desktop.js"></script>

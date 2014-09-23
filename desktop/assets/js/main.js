@@ -59,11 +59,7 @@ $(function(){
 			login();
 	}
 	
-	function nav_table(table){
-		return;
-	}
-	
-	function edit_table(name){
+	function nav_edit_table(name){
 		var $container = $('#container_' + name);
 		var $table = $('#tbl_' + name);
 		var $curCell =  $table.find('tbody').find('tr:first td:first');
@@ -178,7 +174,7 @@ $(function(){
 				editting = false;
 			}
 		};
-		
+		//返回下个单元格
 		function navigator(active , d , rows ,cols)
 		{
 			var x = active.index();
@@ -309,7 +305,7 @@ $(function(){
 		 
 		var html = getGrid('computer',Computer.collection,cols);
 		$('div#computer .window_main').append($(html));
-		edit_table('computer');
+		nav_edit_table('computer');
 	}
 	
 	function getGrid(id, data , cols) {
