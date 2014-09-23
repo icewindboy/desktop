@@ -72,12 +72,16 @@ $(function(){
 		var $input = $editDiv.find('input[type=text]');
 		$table.data('curCell',{curCell : $curCell,text : $curCell.text()});
 		$container.attr('tabIndex',-1);
-		//$table.attr('tabIndex',"-1");
-		//
+
 		function moveToCell($newCell){
 			//获取老单元格信息
-			var oldCellData = $table.data('curCell');
+			var oldCellData = $table.data('curCell') || { 
+				curCell : curCell,text : curCell.text()
+			};
 			var $oldCell = oldCellData.curCell;
+			if ($newCell.is($oldCell))
+				return;
+				
 			var oldText = oldCellData.text;
 			//设置新单元格
 			var $newTextNode = $newCell.contents().first();
@@ -97,28 +101,47 @@ $(function(){
 			$oldCell.text(oldText);
 			
 			//设置edit div的高度,内容
-			$editDiv.height($newCell.height() -2);
+			$editDiv.height($newCell.height() - 4);
 			$editDiv.find('#dsptext').text(text);		
 			//设置 edit高度
-			$input.css({'top' : -100});			
-			$input.val(text).select();
-			$input.removeAttr('focus').focus();			
+			$input.css({'top' : -100}).removeAttr('focus');	
+			$input.val(text).focus().select();			
 		}
 		
 		$table.on('click',function(e){
-			if (e.target.nodeName !== 'TD')
-				return;
+			//查询当前是否点击到一个TD区域了
+			var $t = $(e.target).closest("td");
 			
-			moveToCell($(e.target));
+			if ($t.length)	{
+				moveToCell($t);
+			}
+			//！！！要点!!!，，确保input有焦点，否则绑定到input上的事件处理程序无作用
+			$input.focus();
 		});
-		
+
 		$table.on('dblclick',function(e){
 			if (!editting)
 				editting = true;	
 			
 			showInput();
 		});
-		
+
+		$input.off('keyup keydown');
+		$input.on('keyup',function(e){
+			var $curCellData = $table.data('curCell');
+			$curCellData.text = $input.val();
+			return true;
+		});
+
+		$input.on('keydown',function keydown(e){
+			if ($.inArray(e.keyCode,[9,37,38,39,40])>-1 || e.keyCode <20 && $.inArray(e.keyCode,[0,8])==-1)
+			{
+				handleKey(e);
+				return true;
+			}
+			//显示文本框接收键盘输入 important
+			showInput();
+		});				
 		//显示$editDiv内的input编辑框
 		function showInput(){		
 			var focus = $input.attr('focus');
@@ -129,120 +152,65 @@ $(function(){
 				$input.attr('focus',1);
 			}
 		}
-				
-		$editDiv.on('keyup',function(e){
-			var $curCellData = $table.data('curCell');
-			$curCellData.text = $input.val();
-			return true;
-		});
-
-		$editDiv.on('keydown',function keydown(e){
-			if ($.inArray(e.keyCode,[9,37,38,39,40])>-1 || e.keyCode <20 && $.inArray(e.keyCode,[0,8])==-1)
-			{
-				handleKey(e);
-				return true;
-			}
-			//显示文本框接收键盘输入 important
-			showInput();
-		});
-		
+			
 		function handleKey(e){
 			var shift = e.shiftKey , ctrl = e.ctrlKey ,alt = e.altKey,keyCode = e.keyCode;
 			var c = $table.data('curCell').curCell;
-			var n =curCell;
+			var d = "";
+			var moveTo;
+			var rows = $table.find('tbody tr').length;
+			var cols = $table.find('tbody tr:first').find('td').length;
 			
 			if ( editting && $.inArray(e.keyCode,[37,38,39,40])>-1)
 				return true;
 			
-			if ( keyCode ===38 ) //top
-			{
-				
-			}
+			if ( keyCode ===37 || shift && keyCode == 9 ) d = "l";
+			if ( keyCode ===38  ) d = "t";
+			if ( keyCode ===39 || keyCode == 9 ) d = "r";
+			if ( keyCode ===40 || keyCode ==13) d = "b";
 			
+			if ( d !== "") {
+				moveTo = navigator( c ,d , rows , cols);
+				if ( moveTo.length && !c.is(moveTo) )
+					moveToCell(moveTo);
+					
+				e.preventDefault();	
+				editting = false;
+			}
 		};
 		
 		function navigator(active , d , rows ,cols)
 		{
 			var x = active.index();
 			var y = active.closest('tr').index();
+			var l = (y) * cols + x ;
+			var $next = active;
+			var len = rows * cols - 1;
+			var end = 0;
 			
-			if (d == 37) {  //left
-			   x--;
-			}
-			if (d == 38) {  //top
-				y--;
-			}
-			if (d == 39) {  //right
-				x++
-			}
-			if (d == 40) {  //top
-				y++
-			}
-			var next = $('tr').eq(y).find('td').eq(x);
+			if (d == 'l')  (l > 0 )? l-- : end++;                         //left
+			if (d == 't')  (l > cols - 1) ? l -= cols : end++;            //top
+			if (d == 'r')  (l < len) ? l++ :  end++;                      //right
+			if (d == 'b')  (l + cols - 1 < len) ? l += cols : end++;      //bottom
 			
-		}
-		function direction(e){
-			var d = (-1);
-			var shift = e.shiftKey , ctrl = e.ctrlKey ,alt = e.altKey,keyCode = e.keyCode;
-			var oldrow = currentCell[0], oldcol = currentCell[1];
-			var row = oldrow, col = oldcol;
-			var rows = data.length,cols = columns.length;
-			
-			//如果edit是编辑状态，不响应单元格左右移动事件
-			if ((keyCode === 39 || keyCode ===37) && editting)
-				return false;
+			if ( end )
+				return $next;
 				
-			if (keyCode === 9) {
-				if (shift) d = 3;
-				else d = 1;
-			}
-			if (keyCode ===39 ) {
-				d =1; //right
-			}
-			if (keyCode ===37) {
-				d =3; //left
-			}
-			if (keyCode ===40 || keyCode ===13) {
-				d =2; //down
-			}
-			if (keyCode ===38) {
-				d =0; //top
-			}			
-			if (d == 0 ) {
-				if (  row > 0)
-					row--;
-			}
-			if (d == 1 ) {
-				if ( col == cols-1 && row < rows-1)
-				{
-					col =0;
-					row++;
-				}			
-				else if ( col < cols-1) 
-					col ++;
-			}
-			if (d == 2 ) {
-				if (  row < rows-1)
-					row++;
-			}	
-			if (d == 3 ) {
-				if ( col == 0 && row > 0){
-					col = cols - 1;
-					row--;
-				}
-				else if ( col > 0) 
-					col --;				
-			}
+			var $next = $table.find('tbody tr').eq(Math.floor(l / cols)).find('td').eq(l % cols);
 			
-			if (d > -1)
-				e.preventDefault();
-			if ( oldrow !== row || oldcol !== col){
-				editting = false;
-				return $table.find('td[row=' + row + '][col=' + col +']');
-			}
+			return $next;
+			/*
+			//递归的一个例子，方便控制不移动到某些列
+			if ($next.is(':visible') && $next.index() != 0 && $next.index() != 1 )
+				return $next;
 			else
-				return false;
-		}		
+			{
+				if ( l < 2 ) return active;
+				else
+					return navigator($next ,d ,rows ,cols);			
+			}
+			*/
+		}
 	}
 	
 	function makeDesk(forms){

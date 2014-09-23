@@ -331,6 +331,7 @@ table.data td {
   position : relative;
   overflow : hidden;
   vertical-align: middle;
+  height : 25px;
 }
 
 table.data th {
