@@ -59,7 +59,7 @@ $(function(){
 			login();
 	}
 	
-	function nav_edit_table(name){
+	function nav_edit_table(name, model,cols){
 		var $container = $('#container_' + name);
 		var $table = $('#tbl_' + name);
 		var $curCell =  $table.find('tbody').find('tr:first td:first');
@@ -98,9 +98,11 @@ $(function(){
 			
 			//设置edit div的高度,内容
 			$editDiv.height($newCell.height() - 4);
+			$input.parent().height($newCell.height() - 4);
 			$editDiv.find('#dsptext').text(text);		
 			//设置 edit高度
-			$input.css({'top' : -100}).removeAttr('focus');	
+			//$input.css({'top' : -100}).removeAttr('focus');	
+			$input.parent().attr('z-index' , 1000-100);
 			$input.val(text).focus().select();			
 		}
 		
@@ -112,7 +114,7 @@ $(function(){
 				moveToCell($t);
 			}
 			//！！！要点!!!，，确保input有焦点，否则绑定到input上的事件处理程序无作用
-			$input.focus();
+			//$input.focus();
 		});
 
 		$table.on('dblclick',function(e){
@@ -122,14 +124,14 @@ $(function(){
 			showInput();
 		});
 
-		$input.off('keyup keydown');
-		$input.on('keyup',function(e){
+		$editDiv.off('keyup keydown');
+		$editDiv.on('keyup',function(e){
 			var $curCellData = $table.data('curCell');
 			$curCellData.text = $input.val();
 			return true;
 		});
 
-		$input.on('keydown',function keydown(e){
+		$editDiv.on('keydown',function keydown(e){
 			if ($.inArray(e.keyCode,[9,37,38,39,40])>-1 || e.keyCode <20 && $.inArray(e.keyCode,[0,8])==-1)
 			{
 				handleKey(e);
@@ -140,13 +142,13 @@ $(function(){
 		});				
 		//显示$editDiv内的input编辑框
 		function showInput(){		
-			var focus = $input.attr('focus');
-			if (!focus){
-				$input.css({top : 0});						
-					
+			//var focus = $input.attr('focus');
+			//if (!focus){
+				//$input.css({top : 0});						
+				$input.parent().attr('z-index' , 1000+100);	
 				$input.select().focus();
-				$input.attr('focus',1);
-			}
+			//	$input.attr('focus',1);
+			//}
 		}
 			
 		function handleKey(e){

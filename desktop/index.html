@@ -101,8 +101,10 @@ window.top.location = 'ie.html';
 
 <div style="display :none">
 	<div id='edit' style="border:solid 2px #ff0000;position : relative;overflow : hidden;width : 96%" tabIndex=-1 >
-	  <div id='dsptext' z-index="-1"></div>
-	  <input type ='text' style="position : absolute;border : 0;font-size : 90%;width : 100%;height:100%" z-index="1000"></input>
+	  <div id='dsptext' z-index="1000" style="position : absolute ; width : 100%"></div>
+	  <div z-index="900" style="position : absolute ; width : 100%" tabIndex=-1>
+		<input type ='text' style="position : absolute;border : 0;font-size : 90%;width : 100%;height:100%" ></input>
+	  </div>	
 	</div> 
 </div>
   
