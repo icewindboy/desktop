@@ -100,9 +100,9 @@ $(function(){
 			$editDiv.height($newCell.height() - 4);
 			$input.parent().height($newCell.height() - 4);
 			$editDiv.find('#dsptext').text(text);		
-			//设置 edit高度
-			//$input.css({'top' : -100}).removeAttr('focus');	
-			$input.parent().attr('z-index' , 1000-100);
+			//设置 $input			
+			$input.parent().css('z-index' , 1000-100);
+			$input.removeAttr('focus');
 			$input.val(text).focus().select();			
 		}
 		
@@ -112,9 +112,8 @@ $(function(){
 			
 			if ($t.length)	{
 				moveToCell($t);
+				editting = false;
 			}
-			//！！！要点!!!，，确保input有焦点，否则绑定到input上的事件处理程序无作用
-			//$input.focus();
 		});
 
 		$table.on('dblclick',function(e){
@@ -142,13 +141,13 @@ $(function(){
 		});				
 		//显示$editDiv内的input编辑框
 		function showInput(){		
-			//var focus = $input.attr('focus');
-			//if (!focus){
+			var focus = $input.attr('focus');
+			if (!focus){
 				//$input.css({top : 0});						
-				$input.parent().attr('z-index' , 1000+100);	
+				$input.parent().css('z-index' , 1000+100);	
 				$input.select().focus();
-			//	$input.attr('focus',1);
-			//}
+				$input.attr('focus',1);
+			}
 		}
 			
 		function handleKey(e){
@@ -309,7 +308,7 @@ $(function(){
 		$('div#computer .window_main').append($(html));
 		nav_edit_table('computer');
 	}
-	
+
 	function getGrid(id, data , cols) {
 		var source = $('#grid-tpl').html();
 		var template = Handlebars.compile(source);
