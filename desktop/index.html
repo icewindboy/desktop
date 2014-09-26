@@ -53,10 +53,10 @@ window.top.location = 'ie.html';
 </script>
 
 <script id="task-tpl" type="text/x-handlebars-template">
-	  <li>
+	<li>
 		<a id ="dock_{{name}}">
-		  <img src="{{src}}" />
-		  {{title}}
+	       <img src="{{src}}" />
+		   {{title}}
 		</a>
 	  </li>
 </script>
@@ -68,18 +68,20 @@ window.top.location = 'ie.html';
 			<tr>
 				<th><b>id</b></th>
 				{{#each col}}
-					<th><b>{{this}}</b></th>
+					<th name="{{name}}"><b>{{title}}</b></th>
 				{{/each}}
 			</tr>
 		</thead>
-		{{#each data}}
-		<tr>
-			<td>{{@index}}</td>
-			{{#each ../colKey}}
-				<td>{{lookup ../this.attributes this}}</td>
+		<tbody>
+			{{#each data}}
+			<tr>
+				<td>{{@index}}</td>
+				{{#each ../col}}
+					<td>{{lookup ../this.attributes name}}</td>
+				{{/each}}
+			</tr>
 			{{/each}}
-		</tr>
-		{{/each}}
+		</tbody>
 	</table>
   </div>	
 </script>
@@ -102,7 +104,7 @@ window.top.location = 'ie.html';
 <div style="display :none">
 	<div id='edit' style="border:solid 2px #ff0000;position : relative;overflow : hidden;width : 96%" tabIndex=-1 >
 	  <div id='dsptext' style="background-color : white; position : absolute ; width : 100%;z-index : 1000;"></div>
-	  <div  style="position : absolute ; width : 100%;" tabIndex=-1>
+	  <div style="position : absolute ; width : 100%;" tabIndex=-1>
 		<input type ='text' style="position : absolute;border : 0;font-size : 90%;width : 100%;height:100%" ></input>
 	  </div>	
 	</div> 

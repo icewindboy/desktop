@@ -68,7 +68,7 @@ $(function(){
 		var $input = $editDiv.find('input[type=text]');
 		$table.data('curCell',{curCell : $curCell,text : $curCell.text()});
 		$container.attr('tabIndex',-1);
-
+		
 		function moveToCell($newCell){
 			//获取老单元格信息
 			var oldCellData = $table.data('curCell') || { 
@@ -101,9 +101,11 @@ $(function(){
 			$input.parent().height($newCell.height() - 4);
 			$editDiv.find('#dsptext').text(text);		
 			//设置 $input			
-			$input.parent().css('z-index' , 1000-100);
+			$input.parent().css('z-index' , 1000 - 100);
 			$input.removeAttr('focus');
-			$input.val(text).focus().select();			
+			$input.val(text).focus().select();		
+
+			editting = false;
 		}
 		
 		$table.on('click',function(e){
@@ -112,7 +114,6 @@ $(function(){
 			
 			if ($t.length)	{
 				moveToCell($t);
-				editting = false;
 			}
 		});
 
@@ -131,6 +132,7 @@ $(function(){
 		});
 
 		$editDiv.on('keydown',function keydown(e){
+			console.log(e.keyCode);
 			if ($.inArray(e.keyCode,[9,37,38,39,40])>-1 || e.keyCode <20 && $.inArray(e.keyCode,[0,8])==-1)
 			{
 				handleKey(e);
@@ -141,13 +143,16 @@ $(function(){
 		});				
 		//显示$editDiv内的input编辑框
 		function showInput(){		
-			var focus = $input.attr('focus');
-			if (!focus){
-				//$input.css({top : 0});						
-				$input.parent().css('z-index' , 1000+100);	
-				$input.select().focus();
-				$input.attr('focus',1);
-			}
+			setTimeout(function()
+			{
+				var focus = $input.attr('focus');
+				if (!focus){
+										
+					$input.parent().css('z-index' , 1000+100);	
+					$input.focus();
+					$input.attr('focus',1);
+					}
+			},100);
 		}
 			
 		function handleKey(e){
@@ -161,10 +166,10 @@ $(function(){
 			if ( editting && $.inArray(e.keyCode,[37,38,39,40])>-1)
 				return true;
 			
-			if ( keyCode ===37 || shift && keyCode == 9 ) d = "l";
-			if ( keyCode ===38  ) d = "t";
-			if ( keyCode ===39 || keyCode == 9 ) d = "r";
-			if ( keyCode ===40 || keyCode ==13) d = "b";
+			if ( keyCode === 37 || shift && keyCode == 9 ) d = "l";
+			if ( keyCode === 38  ) d = "t";
+			if ( keyCode === 39 || keyCode == 9 ) d = "r";
+			if ( keyCode === 40 || keyCode == 13) d = "b";
 			
 			if ( d !== "") {
 				moveTo = navigator( c ,d , rows , cols);
@@ -312,18 +317,11 @@ $(function(){
 	function getGrid(id, data , cols) {
 		var source = $('#grid-tpl').html();
 		var template = Handlebars.compile(source);
-		var colList = [];
-		var colKey = [];
-		$.each(cols , function(i,col){
-			colList.push(col.title);
-			colKey.push(col.name);
-		});
 		
 		return template({
 			name : id
 			,data : data
-			,col : colList
-			,colKey : colKey
+			,col : cols
 		});
 	}
 	
