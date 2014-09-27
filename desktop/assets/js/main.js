@@ -41,7 +41,6 @@ jQuery.fn.putCursorAtEnd = function() {
   });
 };
 
-
 $(function(){
 	$.browser = {};
 	var moz = $.browser.mozilla = /firefox/.test(navigator.userAgent.toLowerCase()); 
@@ -59,6 +58,16 @@ $(function(){
 			login();
 	}
 	
+	function TextValue(args){
+		function init()
+		{
+			
+		}
+		this.load = function(){
+			
+		}
+		this.init();
+	}
 	function nav_edit_table(name, model,cols){
 		var $container = $('#container_' + name);
 		var $table = $('#tbl_' + name);
@@ -66,8 +75,11 @@ $(function(){
 		var editting = false;
 		var $editDiv = $('#edit');
 		var $input = $editDiv.find('input[type=text]');
+		var editors =[];
+		
 		$table.data('curCell',{curCell : $curCell,text : $curCell.text()});
 		$container.attr('tabIndex',-1);
+		
 		
 		function moveToCell($newCell){
 			//获取老单元格信息
@@ -75,10 +87,12 @@ $(function(){
 				curCell : curCell,text : curCell.text()
 			};
 			var $oldCell = oldCellData.curCell;
-			if ($newCell.is($oldCell))
-				return;
-				
 			var oldText = oldCellData.text;
+						
+			//恢复老单元格
+			$oldCell.removeClass('select');
+			$oldCell.text(oldText);
+			
 			//设置新单元格
 			var $newTextNode = $newCell.contents().first();
 			var text = $newTextNode.text();
@@ -86,53 +100,54 @@ $(function(){
 			if  ( $newTextNode.length )
 				$newTextNode.replaceWith($editDiv);
 			else
-				$newCell.appCodeName($editDiv);
+				$newCell.append($editDiv);
 			$newCell.addClass('select');	
 			//保存newCell
 			$table.removeData('curCell');
 			$table.data('curCell',{curCell : $newCell,text : text});
 			
-			//恢复老单元格
-			$oldCell.removeClass('select');
-			$oldCell.text(oldText);
-			
 			//设置edit div的高度,内容
 			$editDiv.height($newCell.height() - 4);
-			$input.parent().height($newCell.height() - 4);
-			$editDiv.find('#dsptext').text(text);		
+			$('#edittext').height($newCell.height() - 4);
+			$('#dsptext').text(text);		
 			//设置 $input			
-			$input.parent().css('z-index' , 1000 - 100);
+			$('#dsptext').css('z-index' , 1000);
 			$input.removeAttr('focus');
-			$input.val(text).focus().select();		
-
+			$input.val(text).select();		
 			editting = false;
 		}
 		
-		$table.on('click',function(e){
+		$table.on('click','td',function(e){
 			//查询当前是否点击到一个TD区域了
-			var $t = $(e.target).closest("td");
-			
-			if ($t.length)	{
+			console.log('click');
+			var $t = $(e.target).closest('td');
+			if (!$t.is($table.data('curCell').curCell))
 				moveToCell($t);
-			}
+			else
+				$input.select().focus();
+				
 		});
 
-		$table.on('dblclick',function(e){
+		$table.on('dblclick','td',function(e){
+			console.log('dblclick');
 			if (!editting)
 				editting = true;	
 			
 			showInput();
 		});
-
-		$editDiv.off('keyup keydown');
-		$editDiv.on('keyup',function(e){
+		//append等操作可能导致绑定事件丢失，委托table进行
+		$table.off('keyup keydown');
+		$table.on('keyup',$editDiv,function(e){
+			console.log(e.keyCode);
+			console.log(e.target);
 			var $curCellData = $table.data('curCell');
 			$curCellData.text = $input.val();
 			return true;
 		});
 
-		$editDiv.on('keydown',function keydown(e){
+		$table.on('keydown',$editDiv,function keydown(e){
 			console.log(e.keyCode);
+			console.log(e.target);
 			if ($.inArray(e.keyCode,[9,37,38,39,40])>-1 || e.keyCode <20 && $.inArray(e.keyCode,[0,8])==-1)
 			{
 				handleKey(e);
@@ -140,19 +155,19 @@ $(function(){
 			}
 			//显示文本框接收键盘输入 important
 			showInput();
-		});				
+		});			
 		//显示$editDiv内的input编辑框
 		function showInput(){		
 			setTimeout(function()
 			{
 				var focus = $input.attr('focus');
 				if (!focus){
-										
-					$input.parent().css('z-index' , 1000+100);	
-					$input.focus();
+					$('#dsptext').css('z-index' ,800);				
+					//$input.parent().css('z-index' , 1000+100);	
 					$input.attr('focus',1);
+					$input.focus();
 					}
-			},100);
+			},0);
 		}
 			
 		function handleKey(e){
