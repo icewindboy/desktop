@@ -1,24 +1,25 @@
 var isLogin = true;
-var ICON_PATH='assets/images/icons/'
-var formCount={};
+var ICON_PATH = 'assets/images/icons/';
+var formCount = {};
 
-var cfg={
-	forms : [{
-		name : 'computer',
-		title : '电脑',
-		small : ICON_PATH + 'icon_16_computer.png',
-		medium : ICON_PATH + 'icon_22_computer.png',
-		large : ICON_PATH + 'icon_32_computer.png'
+var cfg = {
+	forms : [
+		{
+			name : 'computer',
+			title : '电脑',
+			small : ICON_PATH + 'icon_16_computer.png',
+			medium : ICON_PATH + 'icon_22_computer.png',
+			large : ICON_PATH + 'icon_32_computer.png'
+		},
+		{
+			name : 'drive',
+			title : '硬盘',
+			small : ICON_PATH + 'icon_16_drive.png',
+			medium : ICON_PATH + 'icon_22_drive.png',
+			large : ICON_PATH + 'icon_32_drive.png'
 		}
-		,{
-		name : 'drive',
-		title : '硬盘',
-		small : ICON_PATH + 'icon_16_drive.png',
-		medium : ICON_PATH + 'icon_22_drive.png',
-		large : ICON_PATH + 'icon_32_drive.png'
-	}]
-}
-
+	]
+};
 
 jQuery.fn.putCursorAtEnd = function() {
   return this.each(function() {
