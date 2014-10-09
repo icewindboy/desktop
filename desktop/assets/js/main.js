@@ -50,6 +50,9 @@ $(function(){
 	var ie=$.browser.msie = /msie/.test(navigator.userAgent.toLowerCase())
 	 || !!navigator.userAgent.match(/Trident\/7\./);
 	
+	Editor = {
+		'text' : textEditor
+	};
 	function init(){
 		var forms = cfg.forms;
 		if (isLogin){
@@ -59,7 +62,7 @@ $(function(){
 			login();
 	}
 	
-	function TextValue(args){
+	function textEditor(args){
 		function init()
 		{
 			
@@ -81,6 +84,11 @@ $(function(){
 		$table.data('curCell',{curCell : $curCell,text : $curCell.text()});
 		$container.attr('tabIndex',-1);
 		
+		function getEditor($cell){
+			var index = $cell.index();
+
+			return Editor[cols[index].editor];
+		}
 		
 		function moveToCell($newCell){
 			//获取老单元格信息
@@ -125,16 +133,13 @@ $(function(){
 			if (!$t.is($table.data('curCell').curCell))
 				moveToCell($t);
 			else
-				$input.select().focus();
-				
+				showInput();
 		});
 
 		$table.on('dblclick','td',function(e){
 			console.log('dblclick');
 			if (!editting)
 				editting = true;	
-			
-			showInput();
 		});
 		//append等操作可能导致绑定事件丢失，委托table进行
 		$table.off('keyup keydown');
@@ -182,10 +187,10 @@ $(function(){
 			if ( editting && $.inArray(e.keyCode,[37,38,39,40])>-1)
 				return true;
 			
-			if ( keyCode === 37 || shift && keyCode == 9 ) d = "l";
+			if ( keyCode === 37 || shift && keyCode === 9 ) d = "l";
 			if ( keyCode === 38  ) d = "t";
-			if ( keyCode === 39 || keyCode == 9 ) d = "r";
-			if ( keyCode === 40 || keyCode == 13) d = "b";
+			if ( keyCode === 39 || keyCode === 9 && !shift ) d = "r";
+			if ( keyCode === 40 || keyCode === 13) d = "b";
 			
 			if ( d !== "") {
 				moveTo = navigator( c ,d , rows , cols);
@@ -201,29 +206,29 @@ $(function(){
 		{
 			var x = active.index();
 			var y = active.closest('tr').index();
-			var l = (y) * cols + x ;
+			var pos = (y) * cols + x ;
 			var $next = active;
 			var len = rows * cols - 1;
 			var end = 0;
 			
-			if (d == 'l')  (l > 0 )? l-- : end++;                         //left
-			if (d == 't')  (l > cols - 1) ? l -= cols : end++;            //top
-			if (d == 'r')  (l < len) ? l++ :  end++;                      //right
-			if (d == 'b')  (l + cols - 1 < len) ? l += cols : end++;      //bottom
+			if (d == 'l')  (pos > 0 )? pos-- : end++;                         //left
+			if (d == 't')  (pos > cols - 1) ? pos -= cols : end++;            //top
+			if (d == 'r')  (pos < len) ? pos++ :  end++;                      //right
+			if (d == 'b')  (pos + cols - 1 < len) ? pos += cols : end++;      //bottom
 			
 			if ( end )
 				return $next;
 				
-			var $next = $table.find('tbody tr').eq(Math.floor(l / cols)).find('td').eq(l % cols);
+			var $next = $table.find('tbody tr').eq(Math.floor(pos / cols)).find('td').eq(pos % cols);
 			
 			return $next;
 			/*
-			//递归的一个例子，方便控制不移动到某些列
+			//递归的一个例子，控制不移动到某列
 			if ($next.is(':visible') && $next.index() != 0 && $next.index() != 1 )
 				return $next;
 			else
 			{
-				if ( l < 2 ) return active;
+				if ( pos < 2 ) return active;
 				else
 					return navigator($next ,d ,rows ,cols);			
 			}
