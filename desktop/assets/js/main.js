@@ -63,15 +63,13 @@ $(function(){
 	}
 	
 	function textEditor(args){
-		function init()
-		{
-			
-		}
-		this.load = function(){
-			
-		}
-		this.init();
+		var editting = false;
+		var $editDiv = $('#edit');
+		var $input = $editDiv.find('input[type=text]');
+		
+		init();
 	}
+	
 	function nav_edit_table(name, model,cols){
 		var $container = $('#container_' + name);
 		var $table = $('#tbl_' + name);
@@ -86,8 +84,9 @@ $(function(){
 		
 		function getEditor($cell){
 			var index = $cell.index();
-
-			return Editor[cols[index].editor];
+			var editor = cols[index].editor || 'text';
+			
+			return Editor[editor];
 		}
 		
 		function moveToCell($newCell){
@@ -97,7 +96,7 @@ $(function(){
 			};
 			var $oldCell = oldCellData.curCell;
 			var oldText = oldCellData.text;
-						
+				
 			//恢复老单元格
 			$oldCell.removeClass('select');
 			$oldCell.text(oldText);
