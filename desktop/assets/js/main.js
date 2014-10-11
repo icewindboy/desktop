@@ -51,7 +51,7 @@ $(function(){
 	 || !!navigator.userAgent.match(/Trident\/7\./);
 	
 	Editor = {
-		'text' : textEditor
+		'text' : TextEditor
 	};
 	function init(){
 		var forms = cfg.forms;
@@ -62,7 +62,7 @@ $(function(){
 			login();
 	}
 	
-	function textEditor(args){
+	function TextEditor(args){
 		var editting = false;
 		var $editDiv = $('#edit');
 		var $input = $editDiv.find('input[type=text]');
