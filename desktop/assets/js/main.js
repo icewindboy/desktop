@@ -53,6 +53,7 @@ $(function(){
 	Editor = {
 		'text' : TextEditor
 	};
+	
 	function init(){
 		var forms = cfg.forms;
 		if (isLogin){
@@ -70,7 +71,7 @@ $(function(){
 		init();
 	}
 	
-	function nav_edit_table(name, model,cols){
+	function nav_edit_table(name, model, cols){
 		var $container = $('#container_' + name);
 		var $table = $('#tbl_' + name);
 		var $curCell =  $table.find('tbody').find('tr:first td:first');
