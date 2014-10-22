@@ -54,6 +54,15 @@ $(function(){
 		'text' : TextEditor
 	};
 	
+	Handlebars.registerHelper('ifId',function(name , options){
+		var isId = false;
+		isId = name === "id";
+		if (isId)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
+	
 	function init(){
 		var forms = cfg.forms;
 		if (isLogin){
@@ -87,9 +96,16 @@ $(function(){
 			var index = $cell.index();
 			var editor = cols[index].editor || 'text';
 			
+			
 			return Editor[editor];
 		}
 		
+		function restoreCell(model){
+			var oldCell = $table.data('curCell);
+			var y = oldCell.index();
+			var x = oldCell.
+			
+		}
 		function moveToCell($newCell){
 			//获取老单元格信息
 			var oldCellData = $table.data('curCell') || { 
@@ -312,23 +328,24 @@ $(function(){
 	function addComputer()
 	{
 		var cols = [
-			{name : 'name',title : '名称'}
+			 {name : 'id',title : 'Id'}
+			,{name : 'name',title : '名称'}
 			,{name: 'model',title : '型号'}
 			,{name : 'cpu', title : 'CPU'}
 			,{name : 'memory', title : '内存'}
 			];
 			
 		var Computer = Model('computer');
-		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
-		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
-		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
-		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
-		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
-		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
-		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
-		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
-		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
-		Computer.add(new Computer({name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({id : '1' ,name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({id : '2' ,name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({id : '3' ,name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({id : '4' ,name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({id : '5' ,name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({id : '6' ,name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({id : '7' ,name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({id : '8' ,name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({id : '9' ,name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
+		Computer.add(new Computer({id : '10' ,name : '联想', model : 'X-Y110',cpu : 'Intel' , memory : '4G'}));
 		 
 		var html = getGrid('computer',Computer.collection,cols);
 		$('div#computer .window_main').append($(html));

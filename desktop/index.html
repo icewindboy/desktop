@@ -66,18 +66,20 @@ window.top.location = 'ie.html';
 	<table id="tbl_{{name}}" class="data no-select">
 		<thead>
 			<tr>
-				<th><b>id</b></th>
-				{{#each col}}
-					<th name="{{name}} index={{@index}}"><b>{{title}}</b></th>
+				{{#each col}}			
+					<th name="{{name}}"><b>{{title}}</b></th>
 				{{/each}}
 			</tr>
 		</thead>
 		<tbody>
 			{{#each data}}
 			<tr>
-				<td>{{@index}}</td>
 				{{#each ../col}}
-					<td>{{lookup ../this.attributes name}}</td>
+					{{#ifId name}}
+						<td idValue="{{lookup ../../this.attributes name}}">{{@../index1}}</td>
+					{{else}}
+						<td>{{lookup ../../this.attributes name}}</td>
+					{{/ifId}}
 				{{/each}}
 			</tr>
 			{{/each}}

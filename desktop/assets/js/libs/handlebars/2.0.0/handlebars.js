@@ -304,6 +304,7 @@ var __module2__ = (function(__dependency1__, __dependency2__) {
           for(var j = context.length; i<j; i++) {
             if (data) {
               data.index = i;
+			  data.index1 = i + 1;
               data.first = (i === 0);
               data.last  = (i === (context.length-1));
 
@@ -319,6 +320,7 @@ var __module2__ = (function(__dependency1__, __dependency2__) {
               if(data) {
                 data.key = key;
                 data.index = i;
+				data.index1 = i + 1;
                 data.first = (i === 0);
 
                 if (contextPath) {
