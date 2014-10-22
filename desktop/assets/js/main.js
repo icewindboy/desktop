@@ -92,20 +92,21 @@ $(function(){
 		$table.data('curCell',{curCell : $curCell,text : $curCell.text()});
 		$container.attr('tabIndex',-1);
 		
-		function getEditor($cell){
+		function getEditor($cell,cols,model){
 			var index = $cell.index();
 			var editor = cols[index].editor || 'text';
-			
-			
+						
 			return Editor[editor];
 		}
 		
-		function restoreCell(model){
-			var oldCell = $table.data('curCell);
+		function restoreCell(cols,model){
+			var oldCell = $table.data('curCell');
 			var y = oldCell.index();
-			var x = oldCell.
+			var id = oldCell.closet('tr').firstChild().attr("idValue");
 			
+			var 
 		}
+		
 		function moveToCell($newCell){
 			//获取老单元格信息
 			var oldCellData = $table.data('curCell') || { 
