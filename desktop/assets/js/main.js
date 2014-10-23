@@ -104,7 +104,8 @@ $(function(){
 			var y = oldCell.index();
 			var id = oldCell.closet('tr').firstChild().attr("idValue");
 			
-			var 
+			var value = model.find(id).attr(cols[y].name);
+			
 		}
 		
 		function moveToCell($newCell){
