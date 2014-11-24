@@ -72,12 +72,53 @@ $(function(){
 			login();
 	}
 	
-	function TextEditor(args){
-		var editting = false;
-		var $editDiv = $('#edit');
+	function TextEditor(){
+		var $table,$curCell,cols,model;
+		var $editDiv = $('edit');
 		var $input = $editDiv.find('input[type=text]');
 		
-		init();
+		function setEditCell(args){
+			$table = args.table;
+			$curCell = args.cell;
+			
+			var $newTextNode = $curCell.contents().first();
+			var text = $newTextNode.text();
+			//替换单元格文本节点
+			if  ( $newTextNode.length )
+				$newTextNode.replaceWith($editDiv);
+			else
+				$curCell.append($editDiv);
+			$curCell.addClass('select');	
+			//保存newCell
+			$table.removeData('curCell');
+			$table.data('curCell',$curCell);
+			
+			//设置edit div的高度,内容
+			$editDiv.height($newCell.height() - 4);
+			$('#edittext').height($newCell.height() - 4);
+			$('#dsptext').text(text);		
+			//设置 $input			
+			$('#dsptext').css('z-index' , 1000);
+			$input.removeAttr('focus');
+			$input.val(text).select();				
+		}
+		
+		function setDspCell(args){
+			$table = args.table;
+			var $oldCell = $table.data('curCell').curCell;
+				
+			//恢复老单元格
+			$oldCell.removeClass('select');
+			$oldCell.text(oldCell.text());
+		}
+		
+		function focus(){
+			$input.focus();
+		}
+		
+		return {
+			setEditCell : setEditCell
+		}
 	}
 	
 	function nav_edit_table(name, model, cols){
@@ -92,107 +133,85 @@ $(function(){
 		$table.data('curCell',{curCell : $curCell,text : $curCell.text()});
 		$container.attr('tabIndex',-1);
 		
-		function getEditor($cell,cols,model){
+		function getEditor($cell){
 			var index = $cell.index();
 			var editor = cols[index].editor || 'text';
 						
 			return Editor[editor];
 		}
 		
-		function restoreCell(cols,model){
-			var oldCell = $table.data('curCell');
-			var y = oldCell.index();
-			var id = oldCell.closet('tr').firstChild().attr("idValue");
+		function setEditCell($cell){
+			var editor = getEditor($cell);
+			editor.setEditCell(args);
+			return editor;
+		}
+		
+		function setDspCell($cell){
+			var editor = getEditor($cell);
+
+			editor.setDspCell();
+			return editor;
+		}		
+		
+		function getValue($cell){
+			var y = $cell.index();
+			var id = $cell.closet('tr').firstChild().attr("idValue");
 			
 			var value = model.find(id).attr(cols[y].name);
+			return value;
+		}
+		
+		function setValue($cell,value){
+			var y = $cell.index();
+			var id = $cell.closet('tr').firstChild().attr("idValue");
 			
+			model.find(id).attr(cols[y].name,value);
 		}
 		
 		function moveToCell($newCell){
 			//获取老单元格信息
-			var oldCellData = $table.data('curCell') || { 
-				curCell : curCell,text : curCell.text()
-			};
-			var $oldCell = oldCellData.curCell;
-			var oldText = oldCellData.text;
-				
-			//恢复老单元格
-			$oldCell.removeClass('select');
-			$oldCell.text(oldText);
+			var oldCell = $table.data('curCell');
+			setDspCell(oldCell);
+		    var editor = setEditCell($newCell);
 			
-			//设置新单元格
-			var $newTextNode = $newCell.contents().first();
-			var text = $newTextNode.text();
-			//替换单元格文本节点
-			if  ( $newTextNode.length )
-				$newTextNode.replaceWith($editDiv);
-			else
-				$newCell.append($editDiv);
-			$newCell.addClass('select');	
-			//保存newCell
-			$table.removeData('curCell');
-			$table.data('curCell',{curCell : $newCell,text : text});
-			
-			//设置edit div的高度,内容
-			$editDiv.height($newCell.height() - 4);
-			$('#edittext').height($newCell.height() - 4);
-			$('#dsptext').text(text);		
-			//设置 $input			
-			$('#dsptext').css('z-index' , 1000);
-			$input.removeAttr('focus');
-			$input.val(text).select();		
+			editor.focus();
 			editting = false;
 		}
 		
 		$table.on('click','td',function(e){
 			//查询当前是否点击到一个TD区域了
-			console.log('click');
+			//console.log('click');
 			var $t = $(e.target).closest('td');
 			if (!$t.is($table.data('curCell').curCell))
 				moveToCell($t);
 			else
-				showInput();
+				getEditor($t).focus();
 		});
 
 		$table.on('dblclick','td',function(e){
-			console.log('dblclick');
+			//console.log('dblclick');
 			if (!editting)
 				editting = true;	
 		});
+		
 		//append等操作可能导致绑定事件丢失，委托table进行
 		$table.off('keyup keydown');
 		$table.on('keyup',$editDiv,function(e){
-			console.log(e.keyCode);
-			console.log(e.target);
 			var $curCellData = $table.data('curCell');
 			$curCellData.text = $input.val();
 			return true;
 		});
 
 		$table.on('keydown',$editDiv,function keydown(e){
-			console.log(e.keyCode);
-			console.log(e.target);
 			if ($.inArray(e.keyCode,[9,37,38,39,40])>-1 || e.keyCode <20 && $.inArray(e.keyCode,[0,8])==-1)
 			{
 				handleKey(e);
 				return true;
 			}
 			//显示文本框接收键盘输入 important
-			showInput();
+			var $t = $(e.target).closest('td');
+			setTimeout(function(){getEditor($t).focus()},0);
 		});			
-		//显示$editDiv内的input编辑框
-		function showInput(){		
-			setTimeout(function()
-			{
-				var focus = $input.attr('focus');
-				if (!focus){
-					$('#dsptext').css('z-index' ,800);				
-					//$input.parent().css('z-index' , 1000+100);	
-					$input.attr('focus',1);
-					$input.focus();
-					}
-			},0);
-		}
 			
 		function handleKey(e){
 			var shift = e.shiftKey , ctrl = e.ctrlKey ,alt = e.altKey,keyCode = e.keyCode;
